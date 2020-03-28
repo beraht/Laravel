@@ -8,6 +8,22 @@ use Auth;
 class UsersController extends Controller
 {
     /**
+     * 中间件
+     */
+    public function __construct()
+    {
+        $this->middleware('auth', [    
+            //处指定的动作以外，所有其他动作都必须登录用户才能访问        
+            'except' => ['login','reg']
+        ]);
+       // 只让未登录用户访问注册页面：
+        $this->middleware('guest', [
+            'only' => ['login']
+        ]);
+    }
+
+
+    /**
      * 注册
      */
     public function reg(){
@@ -48,10 +64,14 @@ class UsersController extends Controller
 
     public function edit(User $user)
     {
+        //用户控制器中使用 authorize 方法来验证用户授权策略
+        $this->authorize('update', $user);
         return view('users.edit', compact('user'));
     }
 
     public function update(User $user,Request $request){
+        //用户控制器中使用 authorize 方法来验证用户授权策略
+        $this->authorize('update', $user);
 
         $this->validate($request, [
             'name' => 'required|max:50',
