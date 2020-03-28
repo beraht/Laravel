@@ -10,8 +10,13 @@
 
     <div class="container">
       <div class="offset-md-1 col-md-10">
+
+        @include('layouts._messages')
+
         @yield('content')
+        
         @include('layouts._footer')
+
       </div>
     </div>
   </body>
